@@ -32,7 +32,7 @@ public class DamageController : MonoBehaviour {
             dtime += 0.15f;
             dx += 3.0f/scale_num;
         }
-        StartCoroutine(WaitingForDel(2.0f));
+        StartCoroutine(WaitingForDel(1.5f));
 
     }
     void CreateObject(int num,Vector3 pos)

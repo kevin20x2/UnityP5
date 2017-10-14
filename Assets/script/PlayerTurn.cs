@@ -96,6 +96,7 @@ public class PlayerTurn : MonoBehaviour {
                     ani.CrossFade("Idle", 0.1f);
                     m_status = Status.NotYourTrun;
                     transform.LookAt(m_list[TargetIndex].transform);
+                    camera_control.reset_position();
                     loader.Battle();
 
                 }
@@ -136,9 +137,9 @@ public class PlayerTurn : MonoBehaviour {
                 ani.SetBool("Moving",true);
                 ani.CrossFade("Walk", 0.1f);
                 focus.ClearFoucs();
-                camera_control.CloseToPoint(m_list[TargetIndex].transform.position+enmey_height,4.0f,60);
+                camera_control.CloseToPoint(m_list[TargetIndex].transform.position+enmey_height,4.0f,40);
                 current_frame_number = 0;
-                stop_frame_number = 60;
+                stop_frame_number = 20;
                 m_status = Status.RunningToEnemy;
 
               //  do_attack();

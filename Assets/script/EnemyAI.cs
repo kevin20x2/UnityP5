@@ -14,6 +14,7 @@ public class EnemyAI : MonoBehaviour {
     };
     loadplayers Loader;
     GameObject TargetPlayer;
+    CameraControl camera_control;
     Status m_status;
     public Vector3 init_pos;
     float Speed = 10.0f;
@@ -23,6 +24,7 @@ public class EnemyAI : MonoBehaviour {
         init_pos = transform.position;
         Loader = GameObject.Find("BattleLoader").GetComponent<loadplayers>();
         Debug.Log("awake " + name);
+        camera_control = GameObject.Find("CameraController").GetComponent<CameraControl>();
         
     }
     void Start () {
@@ -50,6 +52,8 @@ public class EnemyAI : MonoBehaviour {
 	
     void LaunchAttack()
     {
+        camera_control.changeCamera("FrontPlayerCamera");
+    //    GetComponent<Animation>().CrossFade("Attack",0.1f);
         GetComponent<Animator>().SetBool("Attack",true);
         GetComponent<Animator>().SetTrigger("Attacking");
       
@@ -77,6 +81,7 @@ public class EnemyAI : MonoBehaviour {
     {
         yield return new WaitForSeconds(time);
         m_status = Status.RunningBack;
+        camera_control.changeCamera("PlayerCamera");
     }
 	// Update is called once per frame
 	void Update () {

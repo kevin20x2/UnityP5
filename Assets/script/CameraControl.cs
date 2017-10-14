@@ -17,6 +17,8 @@ public class CameraControl : MonoBehaviour {
     int current_number;
     Vector3 init_pos;
     Vector3 target_pos;
+    Vector3 default_transform;
+    Quaternion default_forward;
 	void Start () {
         CameraList = GameObject.FindGameObjectsWithTag("Camera");
         current_index = 0;
@@ -31,6 +33,8 @@ public class CameraControl : MonoBehaviour {
             {
                 CameraList[i].SetActive(true);
                 current_index = i;
+                default_transform = CameraList[i].transform.position;
+                default_forward = CameraList[i].transform.rotation;
             }
             else CameraList[i].SetActive(false);
         }
@@ -49,6 +53,14 @@ public class CameraControl : MonoBehaviour {
         current_number = 0;
         m_status = CameraStatus.Moving;
         
+    }
+    public void reset_position()
+    {
+        CameraList[current_index].transform.position = default_transform;
+        CameraList[current_index].transform.rotation = default_forward;
+
+        Debug.Log("reset position");
+
     }
 	
 	// Update is called once per frame
