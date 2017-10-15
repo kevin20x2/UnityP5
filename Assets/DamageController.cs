@@ -28,14 +28,14 @@ public class DamageController : MonoBehaviour {
         for(int i = vec.Count -1;i>=0;--i)
         {
             //CreateObject(vec[i],new Vector3(dx,0,0));
-            StartCoroutine(WaitingForCreate(dtime,vec[i],base_pos +new Vector3(dx,-dx/20f,0)));
+            StartCoroutine(WaitingForCreate(dtime,vec[i],base_pos,vec.Count-i));
             dtime += 0.15f;
             dx += 3.0f/scale_num;
         }
         StartCoroutine(WaitingForDel(1.5f));
 
     }
-    void CreateObject(int num,Vector3 pos)
+    void CreateObject(int num,Vector3 pos,int number)
     {
         GameObject obj = new GameObject();
         obj.transform.position = pos;
@@ -47,7 +47,8 @@ public class DamageController : MonoBehaviour {
         GameObject camera = GameObject.Find("CameraController").GetComponent<CameraControl>().get_current_camera();
         obj.transform.position = pos + new Vector3(0,0.8f,0);
         obj.transform.LookAt(camera.transform.position);
-        obj.transform.Translate(Vector3.forward*1.0f);
+        obj.transform.Translate(Vector3.forward*1.0f + Vector3.forward*number*0.1f);
+        obj.transform.Translate(Vector3.left*number*0.2f);
     //    obj.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
         obj.transform.Rotate(Vector3.up, 180f);
         obj.transform.Rotate(Vector3.right, -90f);
@@ -55,11 +56,46 @@ public class DamageController : MonoBehaviour {
         obj.AddComponent<TestScale>();
         num_list.Add(obj);
     }
+    public void show_damage(GameObject battle_object,int maxihp,int initp,int top)
+    {
+        GameObject blood =  GameObject.CreatePrimitive(PrimitiveType.Plane);
+        GameObject camera = GameObject.Find("CameraController").GetComponent<CameraControl>().get_current_camera();
+        //obj.transform.position = pos + new Vector3(0,0.8f,0);
+        blood.transform.localScale = new Vector3(0.04f, 0.04f, 0.04f);
+        blood.transform.position = battle_object.transform.position + new Vector3(0, 0.8f, 0);
+        blood.transform.LookAt(camera.transform.position);
+        blood.transform.Translate(Vector3.forward*1.1f);
+        blood.transform.Translate(Vector3.down*0.3f);
+        blood.transform.Translate(Vector3.left*0.7f);
+        blood.transform.Rotate(new Vector3(90,0,0));
+        blood.GetComponent<MeshRenderer>().material = new Material(Shader.Find("Custom/BloodShader"));
+        blood.AddComponent<BloodControl>();
+        BloodControl bc = blood.GetComponent<BloodControl>();
+        Material mat = blood.GetComponent<MeshRenderer>().material;
+        mat.SetColor("_Color",new Color(0.0f,1.0f,192.0f/255));
+        mat.SetFloat("_LineWidth",0.0266f);
+        mat.mainTexture = Resources.Load("blood_empty") as Texture;
+        bc.maxi_blood = maxihp;
+        bc.current_blood = initp;
+        bc.target_blood = top;
+        mat.SetFloat("_Percent",1.0f*initp/maxihp);
+        bc.current_frame = 0;
+        StartCoroutine(WaitingBloodDel(blood,1.5f));
+
+        
+
+
+    }
     // Update is called once per frame
-    IEnumerator WaitingForCreate(float _time,int num,Vector3 pos)
+    IEnumerator WaitingBloodDel(GameObject blood,float _time)
     {
         yield return new WaitForSeconds(_time);
-        CreateObject(num, pos);
+        Destroy(blood);
+    }
+    IEnumerator WaitingForCreate(float _time,int num,Vector3 pos,int number)
+    {
+        yield return new WaitForSeconds(_time);
+        CreateObject(num, pos,number);
         //ani.SetBool("Moving", true);
 
 

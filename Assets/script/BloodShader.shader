@@ -3,12 +3,13 @@
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
 		_LineWidth ("Smoothness", Range(0,0.1)) = 0.01
-		_Percent ("Metallic", Range(0,1)) = 0.5
+		_Percent ("percent", Range(0,1)) = 0.5
 	}
 	SubShader {
 
+		Tags { "Queue"="Transparent" }
 		Pass{
-		Tags { "RenderType"="Transparent" }
+		Tags { "RenderQueue"="Transparent" }
 			Cull Off
 			Blend SrcAlpha OneMinusSrcAlpha
 			//Tags {"LightMode" = "ForwardBase"}

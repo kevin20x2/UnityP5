@@ -32,6 +32,7 @@ public class BattleUnit : MonoBehaviour  {
     public void doDamage(int dp)
     {
         HP -= dp;
+        Debug.Log(gameObject.tag + "get " + dp + "damage..");
         if (HP <= 0)
         {
             is_dead = true;
@@ -47,6 +48,7 @@ public class BattleUnit : MonoBehaviour  {
         }
 
         dc.showNumber(dp,transform.position);
+        dc.show_damage(gameObject,init_hp,HP+dp,HP);
 
         
     }

@@ -68,8 +68,8 @@ public class EnemyAI : MonoBehaviour {
         GetComponent<Animator>().SetBool("Attack",false);
         GetComponent<Animator>().SetTrigger("Attacking");
         BattleUnit t_battle = TargetPlayer.GetComponent<BattleUnit>();
-        t_battle.doDamage(1);
-        Debug.Log(tag +"do 1 Damage to "+TargetPlayer.tag);
+        t_battle.doDamage(t_battle.Attack + Random.Range(-5,5));
+        //Debug.Log(tag +"do 1 Damage to "+TargetPlayer.tag);
 
 
         float animation_time = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
