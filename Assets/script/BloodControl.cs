@@ -9,13 +9,13 @@ public class BloodControl : MonoBehaviour {
     public int target_blood;
     public int current_blood;
     Material mat;
-    CameraControl camera_control;
+    //CameraControl camera_control;
     int frame_number = 30;
     public int current_frame = 0;
 	void Start () {
         mat = GetComponent<MeshRenderer>().material;
         current_blood = maxi_blood;
-        camera_control = GameObject.Find("CameraController").GetComponent<CameraControl>();
+     //   camera_control = GameObject.Find("CameraController").GetComponent<CameraControl>();
        
       //  current_frame = frame_number;
      //   set_blood(50);

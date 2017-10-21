@@ -41,10 +41,12 @@ Shader "Custom/FlowShader" {
 		}
 		fixed4 frag(v2f i):SV_Target
 		{
-			float PI = 3.141592653f;
+			/*float PI = 3.141592653f;
 		float len = sqrt(i.uv.x *i.uv.x + i.uv.y*i.uv.y);
 			float dy = -cos((PI - _Time.y*1.0f) / 2)*len;
-			float dx = sin((PI - _Time.y*1.0f) / 2)*len;
+			float dx = sin((PI - _Time.y*1.0f) / 2)*len;*/
+			float dx = _Time.y *0.01f;
+			float dy = -_Time.y*0.1f;
 			fixed4 ans = tex2D(_MainTex,i.uv+ float2(dx,dy));
 		float is_white = step(0.9,ans.x);
 			return is_white *fixed4(0.0f,0.0f,0.0f,1.0f);

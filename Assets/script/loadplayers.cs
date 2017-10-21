@@ -22,15 +22,9 @@ public class loadplayers : MonoBehaviour {
 
     void init_players()
     {
-        player_list = new List<GameObject>();
+        player_list = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
         enemy_list = new List<GameObject>();
-        unit_list = new List<GameObject>();
-
-        if(GameObject.Find("unitychan"))
-        {
-            player_list.Add(GameObject.Find("unitychan"));
-            unit_list.Add(GameObject.Find("unitychan"));
-        }
+        unit_list = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
 
         foreach(GameObject m_player in player_list)
         {

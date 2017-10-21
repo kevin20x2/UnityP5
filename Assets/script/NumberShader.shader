@@ -2,17 +2,17 @@
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
-		_Glossiness ("Smoothness", Range(0,1)) = 0.5
-		_Metallic ("Metallic", Range(0,1)) = 0.0
+		_LineWidth ("Smoothness", Range(0,1)) = 0.5
+		_Percent ("percent", Range(0,1)) = 0.5
 	}
 	SubShader {
 		Tags { "Queue"="Transparent" }
 		Pass{
-			//Tags {"LightMode" = "ForwardBase"}
-		Tags { "Queue"="Transparent" }
-	Cull Off
+		Tags { "RenderQueue"="Transparent" }
+			Cull Off
 			Blend SrcAlpha OneMinusSrcAlpha
 			//Tags {"LightMode" = "ForwardBase"}
+
 		CGPROGRAM
 		// Physically based Standard lighting model, and enable shadows on all light types
 		#pragma vertex vert

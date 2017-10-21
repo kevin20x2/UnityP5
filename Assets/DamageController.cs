@@ -42,8 +42,9 @@ public class DamageController : MonoBehaviour {
         obj.AddComponent<MeshFilter>();
         obj.AddComponent<MeshRenderer>();
         obj.AddComponent<NumberMesh>();
-        obj.GetComponent<MeshRenderer>().material = new Material(Shader.Find("Custom/NumberShader"));
-        obj.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load(num_str[num]) as Texture;
+        //  obj.GetComponent<MeshRenderer>().material = new Material(Shader.Find("Mobile/Particles/Alpha Blended"));
+        //mat.mainTexture = Resources.Load(num_str[num]) as Texture;
+    //    obj.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load("blood_empty") as Texture;
         GameObject camera = GameObject.Find("CameraController").GetComponent<CameraControl>().get_current_camera();
         obj.transform.position = pos + new Vector3(0,0.8f,0);
         obj.transform.LookAt(camera.transform.position);
@@ -53,6 +54,9 @@ public class DamageController : MonoBehaviour {
         obj.transform.Rotate(Vector3.up, 180f);
         obj.transform.Rotate(Vector3.right, -90f);
 
+        obj.GetComponent<MeshRenderer>().material = new Material(Shader.Find("Custom/BloodShader"));
+        Material mat = obj.GetComponent<MeshRenderer>().material;
+        mat.SetTexture("_MainTex",Resources.Load(num_str[num]) as Texture);
         obj.AddComponent<TestScale>();
         num_list.Add(obj);
     }
