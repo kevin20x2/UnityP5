@@ -52,7 +52,8 @@ public class EnemyAI : MonoBehaviour {
 	
     void LaunchAttack()
     {
-        camera_control.changeCamera("FrontPlayerCamera");
+        
+        camera_control.changeCamera(TargetPlayer.transform.Find("FrontPlayerCamera").gameObject);
     //    GetComponent<Animation>().CrossFade("Attack",0.1f);
         GetComponent<Animator>().SetBool("Attack",true);
         GetComponent<Animator>().SetTrigger("Attacking");

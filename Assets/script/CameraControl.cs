@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class CameraControl : MonoBehaviour {
 
     // Use this for initialization
@@ -19,7 +18,7 @@ public class CameraControl : MonoBehaviour {
     Vector3 target_pos;
     Vector3 default_transform;
     Quaternion default_forward;
-	void Start () {
+	void Awake () {
         CameraList = GameObject.FindGameObjectsWithTag("Camera");
         current_index = 0;
         stop_number = 0;
@@ -32,6 +31,20 @@ public class CameraControl : MonoBehaviour {
             if (CameraList[i].name == object_name)
             {
                 CameraList[i].SetActive(true);
+                current_index = i;
+                default_transform = CameraList[i].transform.position;
+                default_forward = CameraList[i].transform.rotation;
+            }
+            else CameraList[i].SetActive(false);
+        }
+    }
+    public void changeCamera(GameObject obj)
+    {
+        for(int i =0;i<CameraList.Length;++i)
+        {
+            if(obj.Equals(CameraList[i]))
+            {
+                obj.SetActive(true);
                 current_index = i;
                 default_transform = CameraList[i].transform.position;
                 default_forward = CameraList[i].transform.rotation;

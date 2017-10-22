@@ -10,14 +10,19 @@ public class loadplayers : MonoBehaviour {
     private List <GameObject> unit_list;
     private int player_z_pos = -3;
     private int enemy_z_pos = 3;
+    private float player_dis = 4f;
     private CameraControl camera_controller;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    private void Awake()
+    {
+        
+    }
+    void Start () {
+		
         camera_controller = GameObject.Find("CameraController").GetComponent<CameraControl>();
         camera_controller.changeCamera("PlayerCamera");
         init_players();
-		
 	}
 
     void init_players()
@@ -26,10 +31,13 @@ public class loadplayers : MonoBehaviour {
         enemy_list = new List<GameObject>();
         unit_list = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
 
+        float player_left = -player_dis * (player_list.Count-1)/2;
+        int count = 0;
         foreach(GameObject m_player in player_list)
         {
-            m_player.transform.position += new Vector3(0,0,player_z_pos);
+            m_player.transform.position = new Vector3(player_left+count*player_dis,0,player_z_pos);
             m_player.GetComponent<PlayerTurn>().init_pos = m_player.transform.position;
+            count++;
             //m_player.transform.position += new Vect
             
         }

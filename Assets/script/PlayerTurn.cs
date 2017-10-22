@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerTurn : MonoBehaviour {
 
 	// Use this for initialization
@@ -139,7 +140,7 @@ public class PlayerTurn : MonoBehaviour {
                 focus.ClearFoucs();
                 camera_control.CloseToPoint(m_list[TargetIndex].transform.position+enmey_height,4.0f,40);
                 current_frame_number = 0;
-                stop_frame_number = 20;
+                stop_frame_number = 30;
                 m_status = Status.RunningToEnemy;
 
               //  do_attack();
@@ -152,12 +153,14 @@ public class PlayerTurn : MonoBehaviour {
         m_list = enemy_list;
 
         m_status = Status.WaitingChooseSkill;
+        GameObject obj = transform.Find("BackPlayerCamera").gameObject;
+        camera_control.changeCamera(obj);
        // while (m_status != Status.Attacking) ;
     }
     void do_attack()
     {
         ani.SetTrigger("Attack");
-        ani.CrossFade("Attack", 0.1f);
+       // ani.CrossFade("Attack", 0.1f);
         m_status = Status.Attacking;
        
         float attack_time = ani.GetCurrentAnimatorStateInfo(0).length;
@@ -177,6 +180,7 @@ public class PlayerTurn : MonoBehaviour {
         current_frame_number = 0;
         stop_frame_number = 60;
         m_status = Status.RunningBack;
+        camera_control.changeCamera("PlayerCamera");
 
 
     }

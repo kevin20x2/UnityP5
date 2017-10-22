@@ -3,7 +3,7 @@
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
-		_BlurSize ("Blur size ",Float ) = 1.0
+		_BlurSize ("Blur size ",Float ) = 0.0005
 	}
 	SubShader
 		{
