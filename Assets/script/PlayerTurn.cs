@@ -57,7 +57,9 @@ public class PlayerTurn : MonoBehaviour {
                 if(current_frame_number<stop_frame_number)
                 {
                     float tt = 1.0f*current_frame_number / stop_frame_number;
-                    transform.position = Vector3.Lerp(init_pos,m_list[TargetIndex].transform.position,tt);
+                    //if( tt < 0.8)
+                    Transform em_trans = m_list[TargetIndex].transform;
+                        transform.position = Vector3.Lerp(init_pos, m_list[TargetIndex].transform.position+ em_trans.forward, tt);
                     current_frame_number++;
                 }
                 //float dis = Vector3.Distance(transform.position, m_list[TargetIndex].transform.position);
@@ -68,7 +70,8 @@ public class PlayerTurn : MonoBehaviour {
                 //}
                 else
                 {
-                    //ani.SetBool("Moving", false);
+                    ani.SetBool("Moving", false);
+                    camera_control.unset_radio_blur();
                     do_attack();
                 }
             }
@@ -96,8 +99,9 @@ public class PlayerTurn : MonoBehaviour {
                     ani.SetBool("Moving", false);
                     ani.CrossFade("Idle", 0.1f);
                     m_status = Status.NotYourTrun;
-                    transform.LookAt(m_list[TargetIndex].transform);
-                    camera_control.reset_position();
+                    // transform.LookAt(m_list[TargetIndex].transform);
+                    transform.LookAt(init_pos+Vector3.forward);
+                    //camera_control.reset_position();
                     loader.Battle();
 
                 }
@@ -105,10 +109,13 @@ public class PlayerTurn : MonoBehaviour {
         }
         
     }
+    const int button_width = 200;
+    const int button_height = 150;
+
     void OnGUI () {
         if(m_status == Status.WaitingChooseSkill)
         {
-            if(GUI.Button(new Rect(Screen.width - 100, Screen.height - 100, 60, 40), "普通攻击"))
+            if(GUI.Button(new Rect(Screen.width - button_width -20, Screen.height - button_height -20, button_width, button_height), "普通攻击"))
             {
                 m_status = Status.WaitingChooseTarget;
                 m_type = ProcessType.NormalAttack;
@@ -118,30 +125,34 @@ public class PlayerTurn : MonoBehaviour {
         }
         if(m_status == Status.WaitingChooseTarget)
         {
-            if(GUI.Button(new Rect(20,Screen.height-100,60,40),"left"))
+            if(GUI.Button(new Rect(20,Screen.height-button_height -20,button_width,button_height),"left"))
             {
                 TargetIndex--;
                 if (TargetIndex < 0) TargetIndex += m_list.Length;
                 Debug.Log("target index " + TargetIndex);
                 focus.Foucus(m_list[TargetIndex]);
             }
-            if (GUI.Button(new Rect(100, Screen.height - 100, 60, 40), "Right"))
+            if (GUI.Button(new Rect(20+ button_width+20, Screen.height -button_height- 20,button_width , button_height), "Right"))
             {
                 TargetIndex++;
                 if (TargetIndex >= m_list.Length) TargetIndex = 0;
                 Debug.Log("target index " + TargetIndex);
                 focus.Foucus(m_list[TargetIndex]);
             }
-            if (GUI.Button(new Rect(Screen.width - 100, Screen.height - 100, 60, 40), "确定"))
+            if (GUI.Button(new Rect(Screen.width - button_width -20, Screen.height - button_height -20, button_width, button_height), "确定"))
             {
 
                 ani.SetBool("Moving",true);
                 ani.CrossFade("Walk", 0.1f);
                 focus.ClearFoucs();
-                camera_control.CloseToPoint(m_list[TargetIndex].transform.position+enmey_height,4.0f,40);
+              //  camera_control.CloseToPoint(m_list[TargetIndex].transform.position+enmey_height,3.0f,40);
                 current_frame_number = 0;
                 stop_frame_number = 30;
                 m_status = Status.RunningToEnemy;
+
+                GameObject obj = transform.Find("FllowCamera").gameObject;
+                camera_control.changeCamera(obj);
+                camera_control.set_radio_blur(m_list[TargetIndex].transform.position);
 
               //  do_attack();
             }
@@ -159,24 +170,31 @@ public class PlayerTurn : MonoBehaviour {
     }
     void do_attack()
     {
-        ani.SetTrigger("Attack");
-       // ani.CrossFade("Attack", 0.1f);
+        ani.SetBool("Attack",true);
+        ani.CrossFade("Attack", 0.1f);
         m_status = Status.Attacking;
        
         float attack_time = ani.GetCurrentAnimatorStateInfo(0).length;
-        StartCoroutine(WaitingForAttack(attack_time));
+        StartCoroutine(WaitingForAttack(attack_time+1.0f));
+        StartCoroutine(WaitingShowDamage(attack_time));
+       
 
+
+    }
+    IEnumerator WaitingShowDamage(float _time)
+    {
+        yield return new WaitForSeconds(_time);
+        int ap = GetComponent<BattleUnit>().Attack;
+        BattleUnit t_battle = m_list[TargetIndex].GetComponent<BattleUnit>();
+        t_battle.doDamage(ap);
+        Debug.Log("player : " +name+"do "+ ap+" damage to enemy "+ m_list[TargetIndex].name);
 
     }
     IEnumerator WaitingForAttack(float _time)
     {
         yield return new WaitForSeconds(_time);
-        //ani.SetBool("Moving", true);
-        BattleUnit t_battle = m_list[TargetIndex].GetComponent<BattleUnit>();
-        int ap = GetComponent<BattleUnit>().Attack;
-        t_battle.doDamage(ap);
-        ani.SetTrigger("Attack");
-        Debug.Log("player : " +name+"do "+ ap+" damage to enemy "+ m_list[TargetIndex].name);
+        ani.SetBool("Attack",false);
+        ani.SetBool("Moving", true);
         current_frame_number = 0;
         stop_frame_number = 60;
         m_status = Status.RunningBack;

@@ -121,7 +121,8 @@ public class EnemyAI : MonoBehaviour {
             }
             else
             {
-                transform.LookAt(TargetPlayer.transform.position);
+                transform.LookAt(init_pos - Vector3.forward);
+                //transform.LookAt(TargetPlayer.transform.position);
                 m_status = Status.Waiting;
                 Loader.Battle();
 

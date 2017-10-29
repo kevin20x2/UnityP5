@@ -17,12 +17,14 @@ public class BattleUnit : MonoBehaviour  {
     private bool is_dead;
     Animator ani;
     DamageController dc;
+    EffectControl ec;
 
     void Start() {
         HP = init_hp;
         is_dead = false;
         ani = GetComponent<Animator>();
         dc = GameObject.Find("DamageShower").GetComponent<DamageController>();
+        ec = GameObject.Find("DamageShower").GetComponent<EffectControl>();
     }
 
     // Update is called once per frame
@@ -42,21 +44,23 @@ public class BattleUnit : MonoBehaviour  {
         }
         else
         {
-            ani.SetTrigger("Damaged");
+            ani.SetBool("Damaged",true);
             float damage_time = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
             StartCoroutine(waiting_damaged(damage_time));
         }
 
         dc.showNumber(dp,transform.position);
         dc.show_damage(gameObject,init_hp,HP+dp,HP);
+        ec.show_damage_effect(transform.position);
 
         
     }
     IEnumerator waiting_damaged(float time)
     {
         yield return new WaitForSeconds(time);
+        ani.SetBool("Laying", true);
 
-        ani.SetTrigger("Damaged");
+        ani.SetBool("Damaged",false);
 
     }
     public bool get_status()

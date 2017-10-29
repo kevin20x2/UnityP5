@@ -38,6 +38,39 @@ public class CameraControl : MonoBehaviour {
             else CameraList[i].SetActive(false);
         }
     }
+    public void set_radio_blur(Vector3 position)
+    {
+        GameObject current_ca = get_current_camera();
+        DepthTexture dt;
+        if ((dt =current_ca.GetComponent<DepthTexture>()) != null)
+        {
+            //current_ca.GetComponent<Camera>().
+            //DepthTexture dt = current_ca.AddComponent<DepthTexture>();
+            dt.blurLevel = 10;
+            Vector3 pos = current_ca.GetComponent<Camera>().WorldToViewportPoint(position);
+            dt._du = pos.x;
+            dt._dv = pos.y;
+            Debug.Log(">>>>>>>>>>>>>>>>>>>>>>>>x:"+pos.x +" y:"+pos.y+" z:"+pos.z);
+            if(dt.material == null)
+            {
+                dt.material = new Material(Shader.Find("Custom/Radio Blur"));
+
+            }
+          //  dt.enabled = false;
+            //1dt.shader = Shader.Find("custom/Radio Blur");
+           // dt.enabled = true;
+        }
+    }
+    public void unset_radio_blur()
+    {
+        GameObject current_ca = get_current_camera();
+        DepthTexture dt;
+        if ((dt =current_ca.GetComponent<DepthTexture>()) != null)
+        {
+            dt.blurLevel = 1;
+        }
+ 
+    }
     public void changeCamera(GameObject obj)
     {
         for(int i =0;i<CameraList.Length;++i)

@@ -13,6 +13,7 @@ public class DamageController : MonoBehaviour {
       
 	}
     float scale_num = 10.0f;
+    float Del_time = 1.0f;
 	public void showNumber(int number,Vector3 base_pos)
     {
 
@@ -32,7 +33,7 @@ public class DamageController : MonoBehaviour {
             dtime += 0.15f;
             dx += 3.0f/scale_num;
         }
-        StartCoroutine(WaitingForDel(1.5f));
+        StartCoroutine(WaitingForDel(Del_time));
 
     }
     void CreateObject(int num,Vector3 pos,int number)

@@ -3,7 +3,9 @@
 Shader "Custom/Radio Blur" {
 	Properties {
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
-		_Level ("level", Range(0,100)) = 10
+		_Level("level", Range(0,100)) = 10
+		_Du("Du",Float) = 0.5
+		_Dv ("Dv",Float) = 0.5
 	}
 		SubShader{
 			Pass{
@@ -18,6 +20,8 @@ Shader "Custom/Radio Blur" {
 
 			sampler2D _MainTex;
 	int _Level;
+	float _Du;
+	float _Dv;
 			struct v2f {
 				float4 pos : SV_POSITION;
 				float2 uv : TEXCOORD0;
@@ -32,7 +36,7 @@ Shader "Custom/Radio Blur" {
 			fixed4 frag(v2f i):SV_Target
 			{
 				fixed4 c;
-                fixed2 center=fixed2(.5,.5);  
+                fixed2 center=fixed2(_Du,_Dv);  
                 fixed2 uv=i.uv-center;  
                 fixed3 c1=fixed3(0,0,0);  
                 for(fixed j=0;j<_Level;j++){  

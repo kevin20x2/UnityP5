@@ -41,13 +41,21 @@ public class DepthTexture : MonoBehaviour {
             }
             return MyMaterial;
         }
+        set
+        {
+            MyMaterial = value;
+        }
     }
     private Matrix4x4 _CurrentViewMatrix;
     private Matrix4x4 _PreviousViewMatrix;
     [Range(0.0f,0.001f)]
     public float blurSize = 0.005f;
-    [Range(0, 10)]
-    public int blurLevel = 5;
+    [Range(1, 10)]
+    public int blurLevel = 1;
+    [Range(0.0f, 1.0f)]
+    public float _du = 0.5f;
+    [Range(0.0f, 1.0f)]
+    public float _dv = 0.5f;
 	void Start () {
 		
 	}
@@ -61,6 +69,9 @@ public class DepthTexture : MonoBehaviour {
         {
             material.SetFloat("_BlurSize",blurSize);
             material.SetInt("_Level", blurLevel);
+            material.SetFloat("_Du", _du);
+            material.SetFloat("_Dv", _dv);
+
             Matrix4x4 frustumCorners = Matrix4x4.identity;
 
             float fov = camera.fieldOfView;
@@ -106,6 +117,8 @@ public class DepthTexture : MonoBehaviour {
 
             
         }
+        else 
+        Graphics.Blit(source, destination);
         
        
     }
